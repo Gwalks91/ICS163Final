@@ -24,7 +24,7 @@ public class MyGUI : MonoBehaviour
 	
 	/******************** Private hooks to other parts of the environment *****************/
 	/* This is a private hook to the camera that is used to control the view */
-	public GameObject camera;
+	private GameObject camera;
 	private MyNetworkHelper myNetworkHelper;
 	private MyLocation myLocation;
 	private GyroController myGyroController;
@@ -39,10 +39,9 @@ public class MyGUI : MonoBehaviour
 	private string playerPassword;
 	private string secretcode;
 
-	//x = lat, y = lon, z = alt
-	private Vector3 towerCoords;
-	private Vector3 bombCoords;
-	
+	private bool towerPlaced = false;
+	private bool bombPlaced = false;
+
 	/* This is helpful for debugging */
 	private List<string> errors;
 	
@@ -98,6 +97,7 @@ public class MyGUI : MonoBehaviour
 	void checkMyGyroController ()
 	{
 		/* TODO: This needs to be completed */
+		myGyroController = camera.GetComponentInChildren<GyroController>();
 	}
 	
 	
@@ -123,9 +123,11 @@ public class MyGUI : MonoBehaviour
 		
 		/* Get the hooks to the other elements of the environment */
 		/* TODO: This needs to be completed */
+		camera = GameObject.Find("Main Camera");
 		checkNetworkHelper();
 		checkMyLocation();
 		checkMyGyroController();
+
 		
 		/* set the initial location */
 		/* TODO: This needs to be completed */
@@ -368,10 +370,7 @@ public class MyGUI : MonoBehaviour
 			}
 		}
 	}
-	
-	
-	
-	
+
 	
 	/* This draws the gui and attaches the buttons to the appropriate functions */
 	void OnGUI ()
@@ -388,8 +387,20 @@ public class MyGUI : MonoBehaviour
 		
 		// TODO: Implement the rest of the GUI
 		GUI.Label(new Rect(0, 50, Screen.width, 50), "Current Location: (" + lastLat + ", " + lastLng + ") " + lastAlt);
-		GUI.Label(new Rect(0, 100, Screen.width, 50), "Tower Location: " );
-		GUI.Label(new Rect(0, 150, Screen.width, 50), "Bomb Location: " );
+		if(towerPlaced)
+		{
+			GUI.Label(new Rect(0, 100, Screen.width, 50), "Tower Location: (" + myNetworkHelper.getTowerLat() 
+		          					+ ", " + myNetworkHelper.getTowerLng() + ") " + myNetworkHelper.getTowerAlt());
+		}
+		else
+			GUI.Label(new Rect(0, 100, Screen.width, 50), "Tower Location");
+		if(bombPlaced)
+		{
+			GUI.Label(new Rect(0, 150, Screen.width, 50), "Bomb Location: (" + myNetworkHelper.getBombLat() 
+		          	+ ", " + myNetworkHelper.getBombLng() + ") " + myNetworkHelper.getBombAlt());
+		}
+		else
+			GUI.Label(new Rect(0, 150, Screen.width, 50), "Bomb Location");
 
 		//All the text fields for the information we need to put into the game
 		worldName = GUI.TextField(new Rect(0, 200, Screen.width/2, 50), worldName);
@@ -406,15 +417,14 @@ public class MyGUI : MonoBehaviour
 			lastLat = myLocation.getLat();
 			lastLng = myLocation.getLng();
 			lastAlt = myLocation.getAlt();
-			
-			//this doesn't upload the coords, just saves them
-			towerCoords.x = lastLat;
-			towerCoords.y = lastLng;
-			towerCoords.z = lastAlt;
+			myNetworkHelper.buildTowerPoint(lastLat, lastLng, lastAlt);
+			towerPlaced = true;
+	
 		}
 		if(GUI.Button(new Rect(Screen.width/2, 250, Screen.width/2, 50), "Upload Tower")) 
 		{
-			//use network helper to upload the stats from our tower object and clear out the data if successful
+			myNetworkHelper.uploadTowerPoint(worldName, worldPassword, playerName, playerPassword, genericCallback);
+			towerPlaced = false;
 		}
 		if(GUI.Button(new Rect(Screen.width/2, 300, Screen.width/2, 50), "Place Bomb")) 
 		{
@@ -423,29 +433,25 @@ public class MyGUI : MonoBehaviour
 			lastLat = myLocation.getLat();
 			lastLng = myLocation.getLng();
 			lastAlt = myLocation.getAlt();
-
-			//this doesn't upload the coords, just saves them
-			bombCoords.x = lastLat;
-			bombCoords.y = lastLng;
-			bombCoords.z = lastAlt;
+			myNetworkHelper.dropBombPoint(lastLat, lastLng, lastAlt);
+			bombPlaced = true;
 		}
 		if(GUI.Button(new Rect(Screen.width/2, 350, Screen.width/2, 50), "Upload Bomb")) 
 		{
-			//use network helper to upload the stats from our bomb object and clear out the data if successful
+			myNetworkHelper.uploadBombPoint(worldName, worldPassword, playerName, playerPassword, genericCallback);
+			bombPlaced = false;
 		}
 		if(GUI.Button(new Rect(Screen.width/2, 400, Screen.width/2, 50), "Upload Code")) 
 		{
-			//upload the code to the server
+			myNetworkHelper.uploadCode(worldName, worldPassword, playerName, playerPassword, secretcode, genericCallback);
 		}
 		if(GUI.Button(new Rect(Screen.width/2, 450, Screen.width/2, 50), "Leader Board")) 
 		{
-			//request stats
+			myNetworkHelper.requestLeaderBoard(worldName, worldPassword, leaderBoardCallback);
 		}
 		
 	}
-	
-	
-	
+
 	/** This is called by Unity in the draw loop and we use it to update the
 * camera to correspond with the physical position */
 	void Update() {
