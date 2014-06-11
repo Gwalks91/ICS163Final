@@ -1,0 +1,16 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\MyGUI.cs">
+    <Files>
+      <File FileName="Assets\Scripts\MiniJSON.cs" Line="547" Column="2" />
+      <File FileName="Assets\Scripts\MyGUI.cs" Line="393" Column="81" />
+      <File FileName="Assets\Scripts\MyLocation.cs" Line="61" Column="1" />
+      <File FileName="Assets\Scripts\MyNetworkHelper.cs" Line="303" Column="2" />
+      <File FileName="Assets\Scripts\GyroController.cs" Line="9" Column="28" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
