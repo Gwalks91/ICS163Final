@@ -115,10 +115,10 @@ public class MyGUI : MonoBehaviour
 		
 		/* Set the U/I fields to defaults */
 		/* TODO: This needs to be completed */
-		worldName = "ICS163";
-		worldPassword = "YAYA";
-		playerName = "Gwalks";
-		playerPassword = "password";
+		worldName = "MiddleEarth";
+		worldPassword = "Bilbo";
+		playerName = "n";
+		playerPassword = "n";
 		secretcode = "code";
 		
 		/* Get the hooks to the other elements of the environment */
@@ -377,7 +377,7 @@ public class MyGUI : MonoBehaviour
 	{
 		GUI.skin = this.myGUISkin;
 		
-		if (GUI.Button (new Rect (0, 0, Screen.width/2 - 90, 50), "Fetch Status")) 
+		if (GUI.Button (new Rect (0, 800, Screen.width/2 - 90, 50), "Fetch Status")) 
 		{
 			myNetworkHelper.refreshGameState(worldName,worldPassword,playerName,playerPassword,refreshGameStateInGUI);
 		}
@@ -386,31 +386,31 @@ public class MyGUI : MonoBehaviour
 		Input.gyro.enabled = true;
 		
 		// TODO: Implement the rest of the GUI
-		GUI.Label(new Rect(0, 50, Screen.width, 50), "Current Location: (" + lastLat + ", " + lastLng + ") " + lastAlt);
+		GUI.Label(new Rect(0, 850, Screen.width, 50), "Current Location: (" + lastLat + ", " + lastLng + ") " + lastAlt);
 		if(towerPlaced)
 		{
-			GUI.Label(new Rect(0, 100, Screen.width, 50), "Tower Location: (" + myNetworkHelper.getTowerLat() 
+			GUI.Label(new Rect(0, 900, Screen.width, 50), "Tower Location: (" + myNetworkHelper.getTowerLat() 
 		          					+ ", " + myNetworkHelper.getTowerLng() + ") " + myNetworkHelper.getTowerAlt());
 		}
 		else
-			GUI.Label(new Rect(0, 100, Screen.width, 50), "Tower Location");
+			GUI.Label(new Rect(0, 900, Screen.width, 50), "Tower Location");
 		if(bombPlaced)
 		{
-			GUI.Label(new Rect(0, 150, Screen.width, 50), "Bomb Location: (" + myNetworkHelper.getBombLat() 
+			GUI.Label(new Rect(0, 950, Screen.width, 50), "Bomb Location: (" + myNetworkHelper.getBombLat() 
 		          	+ ", " + myNetworkHelper.getBombLng() + ") " + myNetworkHelper.getBombAlt());
 		}
 		else
-			GUI.Label(new Rect(0, 150, Screen.width, 50), "Bomb Location");
+			GUI.Label(new Rect(0, 950, Screen.width, 50), "Bomb Location");
 
 		//All the text fields for the information we need to put into the game
-		worldName = GUI.TextField(new Rect(0, 200, Screen.width/2, 50), worldName);
-		worldPassword = GUI.TextField(new Rect(0, 250, Screen.width/2, 50), worldPassword);
-		playerName = GUI.TextField(new Rect(0, 300, Screen.width/2, 50), playerName);
-		playerPassword = GUI.TextField(new Rect(0, 350, Screen.width/2, 50), playerPassword);
-		secretcode = GUI.TextField(new Rect(0, 400, Screen.width/2, 50), secretcode); 
+		worldName = GUI.TextField(new Rect(0, 1000, Screen.width/2, 50), worldName);
+		worldPassword = GUI.TextField(new Rect(0, 1050, Screen.width/2, 50), worldPassword);
+		playerName = GUI.TextField(new Rect(0, 1100, Screen.width/2, 50), playerName);
+		playerPassword = GUI.TextField(new Rect(0, 1150, Screen.width/2, 50), playerPassword);
+		secretcode = GUI.TextField(new Rect(0, 1200, Screen.width/2, 50), secretcode); 
 
 		//Upload and place buttons 
-		if(GUI.Button(new Rect(Screen.width/2, 200, Screen.width/2, 50), "Place Tower")) 
+		if(GUI.Button(new Rect(Screen.width/2, 1000, Screen.width/2, 50), "Place Tower")) 
 		{
 			//save current position with tower specific object, overwrite this data if already present
 			//first we update our current location
@@ -421,12 +421,12 @@ public class MyGUI : MonoBehaviour
 			towerPlaced = true;
 	
 		}
-		if(GUI.Button(new Rect(Screen.width/2, 250, Screen.width/2, 50), "Upload Tower")) 
+		if(GUI.Button(new Rect(Screen.width/2, 1050, Screen.width/2, 50), "Upload Tower")) 
 		{
 			myNetworkHelper.uploadTowerPoint(worldName, worldPassword, playerName, playerPassword, genericCallback);
 			towerPlaced = false;
 		}
-		if(GUI.Button(new Rect(Screen.width/2, 300, Screen.width/2, 50), "Place Bomb")) 
+		if(GUI.Button(new Rect(Screen.width/2, 1100, Screen.width/2, 50), "Place Bomb")) 
 		{
 			//save current position with bomb specific object, overwrite this data if already present
 			//first we update our current location
@@ -436,16 +436,16 @@ public class MyGUI : MonoBehaviour
 			myNetworkHelper.dropBombPoint(lastLat, lastLng, lastAlt);
 			bombPlaced = true;
 		}
-		if(GUI.Button(new Rect(Screen.width/2, 350, Screen.width/2, 50), "Upload Bomb")) 
+		if(GUI.Button(new Rect(Screen.width/2, 1150, Screen.width/2, 50), "Upload Bomb")) 
 		{
 			myNetworkHelper.uploadBombPoint(worldName, worldPassword, playerName, playerPassword, genericCallback);
 			bombPlaced = false;
 		}
-		if(GUI.Button(new Rect(Screen.width/2, 400, Screen.width/2, 50), "Upload Code")) 
+		if(GUI.Button(new Rect(Screen.width/2, 1200, Screen.width/2, 50), "Upload Code")) 
 		{
 			myNetworkHelper.uploadCode(worldName, worldPassword, playerName, playerPassword, secretcode, genericCallback);
 		}
-		if(GUI.Button(new Rect(Screen.width/2, 450, Screen.width/2, 50), "Leader Board")) 
+		if(GUI.Button(new Rect(Screen.width/2, 1250, Screen.width/2, 50), "Leader Board")) 
 		{
 			myNetworkHelper.requestLeaderBoard(worldName, worldPassword, leaderBoardCallback);
 		}

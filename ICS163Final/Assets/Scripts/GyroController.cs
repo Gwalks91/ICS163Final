@@ -49,7 +49,6 @@ public class GyroController : MonoBehaviour
 	{
 		if (!debug)
 			return;
-		/*
 		GUILayout.Label("Orientation: " + Screen.orientation);
 		GUILayout.Label("Calibration: " + calibration);
 		GUILayout.Label("Camera base: " + cameraBase);
@@ -98,7 +97,7 @@ public class GyroController : MonoBehaviour
 		{
 			debug = false;
 		}
-		*/
+	
 	}
 	
 	#endregion
