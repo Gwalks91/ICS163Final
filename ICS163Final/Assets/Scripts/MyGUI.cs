@@ -39,6 +39,8 @@ public class MyGUI : MonoBehaviour
 	private string playerPassword;
 	private string secretcode;
 
+	private bool show_UI = false;
+
 	private bool towerPlaced = false;
 	private bool bombPlaced = false;
 
@@ -96,8 +98,10 @@ public class MyGUI : MonoBehaviour
 	
 	void checkMyGyroController ()
 	{
-		/* TODO: This needs to be completed */
-		myGyroController = camera.GetComponentInChildren<GyroController>();
+		if(myGyroController == null)
+		{
+			myGyroController = camera.GetComponentInChildren<GyroController>();
+		}
 	}
 	
 	
@@ -271,8 +275,7 @@ public class MyGUI : MonoBehaviour
 					foreach(Object go in tempWorld){
 						Destroy(go);
 					}
-					
-					
+	
 					// Iterate through all the grid elements in the response
 					object grids;
 					d.TryGetValue("result", out grids);
@@ -311,8 +314,6 @@ public class MyGUI : MonoBehaviour
 							Debug.Log("Got a bomb"+indexX*stepXMeters+" "+alt+" "+indexY*stepYMeters);
 							
 						}
-						
-						
 					}
 					
 					//Reset the mesh
@@ -338,8 +339,9 @@ public class MyGUI : MonoBehaviour
 		if (state.TryGetValue ("error", out x)) {
 			if (x.ToString ().Equals ("true")) {
 				if (state.TryGetValue ("errors", out x)) {
-					foreach(object y in (List<object>)x){
-						// TODO: Decide if you want to do anything with error messages: y.ToString()
+					foreach(object y in (List<object>)x)
+					{
+
 					}
 				}
 			}
@@ -376,78 +378,83 @@ public class MyGUI : MonoBehaviour
 	void OnGUI ()
 	{
 		GUI.skin = this.myGUISkin;
-		
-		if (GUI.Button (new Rect (0, 800, Screen.width/2 - 90, 50), "Fetch Status")) 
-		{
-			myNetworkHelper.refreshGameState(worldName,worldPassword,playerName,playerPassword,refreshGameStateInGUI);
-		}
-		
-		// This turns the gyro on and off. You can set it as you see fit
-		Input.gyro.enabled = true;
-		
-		// TODO: Implement the rest of the GUI
-		GUI.Label(new Rect(0, 850, Screen.width, 50), "Current Location: (" + lastLat + ", " + lastLng + ") " + lastAlt);
-		if(towerPlaced)
-		{
-			GUI.Label(new Rect(0, 900, Screen.width, 50), "Tower Location: (" + myNetworkHelper.getTowerLat() 
-		          					+ ", " + myNetworkHelper.getTowerLng() + ") " + myNetworkHelper.getTowerAlt());
-		}
-		else
-			GUI.Label(new Rect(0, 900, Screen.width, 50), "Tower Location");
-		if(bombPlaced)
-		{
-			GUI.Label(new Rect(0, 950, Screen.width, 50), "Bomb Location: (" + myNetworkHelper.getBombLat() 
-		          	+ ", " + myNetworkHelper.getBombLng() + ") " + myNetworkHelper.getBombAlt());
-		}
-		else
-			GUI.Label(new Rect(0, 950, Screen.width, 50), "Bomb Location");
 
-		//All the text fields for the information we need to put into the game
-		worldName = GUI.TextField(new Rect(0, 1000, Screen.width/2, 50), worldName);
-		worldPassword = GUI.TextField(new Rect(0, 1050, Screen.width/2, 50), worldPassword);
-		playerName = GUI.TextField(new Rect(0, 1100, Screen.width/2, 50), playerName);
-		playerPassword = GUI.TextField(new Rect(0, 1150, Screen.width/2, 50), playerPassword);
-		secretcode = GUI.TextField(new Rect(0, 1200, Screen.width/2, 50), secretcode); 
+		show_UI = GUI.Toggle(new Rect(Screen.width/2, 0, Screen.width/2, 50), show_UI, "Show UI");
 
-		//Upload and place buttons 
-		if(GUI.Button(new Rect(Screen.width/2, 1000, Screen.width/2, 50), "Place Tower")) 
+		if(show_UI)
 		{
-			//save current position with tower specific object, overwrite this data if already present
-			//first we update our current location
-			lastLat = myLocation.getLat();
-			lastLng = myLocation.getLng();
-			lastAlt = myLocation.getAlt();
-			myNetworkHelper.buildTowerPoint(lastLat, lastLng, lastAlt);
-			towerPlaced = true;
-	
-		}
-		if(GUI.Button(new Rect(Screen.width/2, 1050, Screen.width/2, 50), "Upload Tower")) 
-		{
-			myNetworkHelper.uploadTowerPoint(worldName, worldPassword, playerName, playerPassword, genericCallback);
-			towerPlaced = false;
-		}
-		if(GUI.Button(new Rect(Screen.width/2, 1100, Screen.width/2, 50), "Place Bomb")) 
-		{
-			//save current position with bomb specific object, overwrite this data if already present
-			//first we update our current location
-			lastLat = myLocation.getLat();
-			lastLng = myLocation.getLng();
-			lastAlt = myLocation.getAlt();
-			myNetworkHelper.dropBombPoint(lastLat, lastLng, lastAlt);
-			bombPlaced = true;
-		}
-		if(GUI.Button(new Rect(Screen.width/2, 1150, Screen.width/2, 50), "Upload Bomb")) 
-		{
-			myNetworkHelper.uploadBombPoint(worldName, worldPassword, playerName, playerPassword, genericCallback);
-			bombPlaced = false;
-		}
-		if(GUI.Button(new Rect(Screen.width/2, 1200, Screen.width/2, 50), "Upload Code")) 
-		{
-			myNetworkHelper.uploadCode(worldName, worldPassword, playerName, playerPassword, secretcode, genericCallback);
-		}
-		if(GUI.Button(new Rect(Screen.width/2, 1250, Screen.width/2, 50), "Leader Board")) 
-		{
-			myNetworkHelper.requestLeaderBoard(worldName, worldPassword, leaderBoardCallback);
+			if (GUI.Button (new Rect (0, 0, Screen.width/2 - 90, 50), "Fetch Status")) 
+			{
+				myNetworkHelper.refreshGameState(worldName,worldPassword,playerName,playerPassword,refreshGameStateInGUI);
+			}
+
+			// This turns the gyro on and off. You can set it as you see fit
+			Input.gyro.enabled = true;
+			
+			// TODO: Implement the rest of the GUI
+			GUI.Label(new Rect(0, 50, Screen.width, 50), "Current Location: (" + lastLat + ", " + lastLng + ") " + lastAlt);
+			if(towerPlaced)
+			{
+				GUI.Label(new Rect(0, 100, Screen.width, 50), "Tower Location: (" + myNetworkHelper.getTowerLat() 
+			          					+ ", " + myNetworkHelper.getTowerLng() + ") " + myNetworkHelper.getTowerAlt());
+			}
+			else
+				GUI.Label(new Rect(0, 100, Screen.width, 50), "Tower Location");
+			if(bombPlaced)
+			{
+				GUI.Label(new Rect(0, 150, Screen.width, 50), "Bomb Location: (" + myNetworkHelper.getBombLat() 
+			          	+ ", " + myNetworkHelper.getBombLng() + ") " + myNetworkHelper.getBombAlt());
+			}
+			else
+				GUI.Label(new Rect(0, 150, Screen.width, 50), "Bomb Location");
+
+			//All the text fields for the information we need to put into the game
+			worldName = GUI.TextField(new Rect(0, 200, Screen.width/2, 50), worldName);
+			worldPassword = GUI.TextField(new Rect(0, 250, Screen.width/2, 50), worldPassword);
+			playerName = GUI.TextField(new Rect(0, 300, Screen.width/2, 50), playerName);
+			playerPassword = GUI.TextField(new Rect(0, 350, Screen.width/2, 50), playerPassword);
+			secretcode = GUI.TextField(new Rect(0, 400, Screen.width/2, 50), secretcode); 
+
+			//Upload and place buttons 
+			if(GUI.Button(new Rect(Screen.width/2, 200, Screen.width/2, 50), "Place Tower")) 
+			{
+				//save current position with tower specific object, overwrite this data if already present
+				//first we update our current location
+				lastLat = myLocation.getLat();
+				lastLng = myLocation.getLng();
+				lastAlt = myLocation.getAlt();
+				myNetworkHelper.buildTowerPoint(lastLat, lastLng, lastAlt);
+				towerPlaced = true;
+		
+			}
+			if(GUI.Button(new Rect(Screen.width/2, 250, Screen.width/2, 50), "Upload Tower")) 
+			{
+				myNetworkHelper.uploadTowerPoint(worldName, worldPassword, playerName, playerPassword, genericCallback);
+				towerPlaced = false;
+			}
+			if(GUI.Button(new Rect(Screen.width/2, 300, Screen.width/2, 50), "Place Bomb")) 
+			{
+				//save current position with bomb specific object, overwrite this data if already present
+				//first we update our current location
+				lastLat = myLocation.getLat();
+				lastLng = myLocation.getLng();
+				lastAlt = myLocation.getAlt();
+				myNetworkHelper.dropBombPoint(lastLat, lastLng, lastAlt);
+				bombPlaced = true;
+			}
+			if(GUI.Button(new Rect(Screen.width/2, 350, Screen.width/2, 50), "Upload Bomb")) 
+			{
+				myNetworkHelper.uploadBombPoint(worldName, worldPassword, playerName, playerPassword, genericCallback);
+				bombPlaced = false;
+			}
+			if(GUI.Button(new Rect(Screen.width/2, 400, Screen.width/2, 50), "Upload Code")) 
+			{
+				myNetworkHelper.uploadCode(worldName, worldPassword, playerName, playerPassword, secretcode, genericCallback);
+			}
+			if(GUI.Button(new Rect(Screen.width/2, 450, Screen.width/2, 50), "Leader Board")) 
+			{
+				myNetworkHelper.requestLeaderBoard(worldName, worldPassword, leaderBoardCallback);
+			}
 		}
 		
 	}
