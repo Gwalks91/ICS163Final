@@ -156,7 +156,7 @@ public class MyGUI : MonoBehaviour
 		Color color;
 		if (!ownerColors.TryGetValue (name, out color)) {
 			// Set a color by choosing random values from 0 - 1 in floats for RGB
-			color = new Color((float)Random.Range(0.0f, 1.0f), (float)Random.Range(0.0f, 1.0f), (float)Random.Range(0.0f, 1.0f));
+			color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 			// Add name and color into ownerColors
 			ownerColors.Add(name, color);
 		}
