@@ -81,7 +81,8 @@ public class MyGUI : MonoBehaviour
 	
 	void checkNetworkHelper ()
 	{
-		if (myNetworkHelper == null) {
+		if (myNetworkHelper == null) 
+		{
 			myNetworkHelper = GameObject.Find ("MyNetworkHelper").GetComponentInChildren<MyNetworkHelper>();
 		}
 	}
@@ -154,7 +155,10 @@ public class MyGUI : MonoBehaviour
 	public Color getOwnerColor(string name){
 		Color color;
 		if (!ownerColors.TryGetValue (name, out color)) {
-			/* TODO: This needs to be completed (optional) */
+			// Set a color by choosing random values from 0 - 1 in floats for RGB
+			color = new Color((float)Random.Range(0.0f, 1.0f), (float)Random.Range(0.0f, 1.0f), (float)Random.Range(0.0f, 1.0f));
+			// Add name and color into ownerColors
+			ownerColors.Add(name, color);
 		}
 		return color;
 	}
@@ -238,7 +242,6 @@ public class MyGUI : MonoBehaviour
 		//Assign mesh to game object
 		MF.mesh = myMesh;
 		world.Add (go);
-		
 		
 	}
 	
@@ -420,9 +423,6 @@ public class MyGUI : MonoBehaviour
 			{
 				//save current position with tower specific object, overwrite this data if already present
 				//first we update our current location
-				lastLat = myLocation.getLat();
-				lastLng = myLocation.getLng();
-				lastAlt = myLocation.getAlt();
 				myNetworkHelper.buildTowerPoint(lastLat, lastLng, lastAlt);
 				towerPlaced = true;
 		
@@ -436,9 +436,6 @@ public class MyGUI : MonoBehaviour
 			{
 				//save current position with bomb specific object, overwrite this data if already present
 				//first we update our current location
-				lastLat = myLocation.getLat();
-				lastLng = myLocation.getLng();
-				lastAlt = myLocation.getAlt();
 				myNetworkHelper.dropBombPoint(lastLat, lastLng, lastAlt);
 				bombPlaced = true;
 			}
@@ -447,7 +444,7 @@ public class MyGUI : MonoBehaviour
 				myNetworkHelper.uploadBombPoint(worldName, worldPassword, playerName, playerPassword, genericCallback);
 				bombPlaced = false;
 			}
-			if(GUI.Button(new Rect(Screen.width/2, 400, Screen.width/2, 50), "Upload Code")) 
+			if(GUI.Button(new Rect(Screen.width/2, 400, Screen.width/2, 50), "Upload Code"))
 			{
 				myNetworkHelper.uploadCode(worldName, worldPassword, playerName, playerPassword, secretcode, genericCallback);
 			}
@@ -460,12 +457,20 @@ public class MyGUI : MonoBehaviour
 	}
 
 	/** This is called by Unity in the draw loop and we use it to update the
-* camera to correspond with the physical position */
-	void Update() {
-		if ((lastLng != myLocation.getLng ()) || (lastLat != myLocation.getLat ()) || (lastAlt != myLocation.getAlt ())) {
+	* camera to correspond with the physical position */
+	void Update() 
+	{
+		if ((lastLng != myLocation.getLng ()) || (lastLat != myLocation.getLat ()) || (lastAlt != myLocation.getAlt ())) 
+		{
 			if(myMesh != null){
 				double xdelta = MyLocation.Haversine.calculate(originY,originX, 0.0, originY, myLocation.getLng(),0.0);
+				if(myLocation.getLng() < originX){
+					xdelta = -xdelta;
+				}
 				double ydelta = MyLocation.Haversine.calculate(originY,originX, 0.0, myLocation.getLat(), originX,0.0);
+				if(myLocation.getLat() < originY){
+					ydelta = -ydelta;
+				}
 				destination = new Vector3 ((float)xdelta, 30.0f, (float)ydelta);
 				origin = new Vector3 (camera.transform.position.x, camera.transform.position.y, camera.transform.position.z);
 				fracJourney = 0.0f;
@@ -474,14 +479,13 @@ public class MyGUI : MonoBehaviour
 			lastLat = myLocation.getLat();
 			lastLng = myLocation.getLng();
 			lastAlt = myLocation.getAlt();
-
-		} else {
+		} 
+		else 
+		{
 			if (fracJourney <= 1.0f) {
 				fracJourney += 0.001f;
 				camera.transform.position = Vector3.Lerp (origin, destination, fracJourney);
 			}
 		}
 	}
-	
-	
 }
