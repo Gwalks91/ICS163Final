@@ -69,8 +69,8 @@ public class MyGUI : MonoBehaviour
 	Color[] colors;
 	
 	/* These are used to keep track of GameObjects that we make dynamically,
-* world is persistent objects, tempWorld are objects that come and go (like
-* towers and bombs */
+	* world is persistent objects, tempWorld are objects that come and go (like
+	* towers and bombs */
 	List<Object> world = new List<Object>();
 	List<Object> tempWorld = new List<Object>();
 	
@@ -154,9 +154,10 @@ public class MyGUI : MonoBehaviour
 * then pick one randomly */	
 	public Color getOwnerColor(string name){
 		Color color;
-		if (!ownerColors.TryGetValue (name, out color)) {
+		if (!ownerColors.TryGetValue (name, out color)) 
+		{
 			// Set a color by choosing random values from 0 - 1 in floats for RGB
-			color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
+			color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1);
 			// Add name and color into ownerColors
 			ownerColors.Add(name, color);
 		}

@@ -1,11 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\MyLocation.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CustomShader.shader">
     <Files>
-      <File FileName="Assets\Scripts\GyroController.cs" Line="146" Column="36" />
-      <File FileName="Assets\Scripts\MyGUI.cs" Line="299" Column="42" />
-      <File FileName="Assets\Scripts\MyNetworkHelper.cs" Line="17" Column="6" />
-      <File FileName="Assets\Scripts\MyLocation.cs" Line="13" Column="76" />
+      <File FileName="Assets\Scripts\MyGUI.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\MyGUI.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GyroController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\MyNetworkHelper.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\MyLocation.cs" Line="1" Column="1" />
+      <File FileName="Assets\CustomShader.shader" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
